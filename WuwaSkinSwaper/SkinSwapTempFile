@@ -1,0 +1,21 @@
+namespace = #{character_name}\SkinSwapVar
+
+[Constants]
+global persist $SkinSwapVar = 0
+global $object_detected = 0
+
+[KeySwap]
+condition = $object_detected == 1
+key = PageUp
+back = PageDown
+type = cycle
+$SkinSwapVar = #{skins_count}
+
+[Present]
+if $object_detected
+	post $object_detected = 0
+endif
+
+[TextureOverrideComponent0]
+#{character_hash}
+$object_detected = 1
