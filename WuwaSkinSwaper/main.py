@@ -2,7 +2,7 @@
 from pathlib import Path
 from datetime import datetime
 
-WORK_DIR = Path('D:\\System\\Downloads\\path')
+WORK_DIR = Path('E:\\Games\\Wuthering Waves ModsLaunchers\\XXMI Launcher\\WWMI\\Mods\\Character Skins')
 BASE_CHARACTER_LIST = []
 
 
@@ -189,11 +189,13 @@ def change_logic(lines, character, number):
     out = []
     tab_flag = False
     hash_flag = False
-    for index in range(len(lines)):
+
+    index = 0
+    while index < len(lines):
         if lines[index].strip().startswith('hash'):
             out.append(lines[index])
-            index += 1
             hash_flag = True
+            index += 1
 
             if lines[index].strip().startswith('match_priority'):
                 index += 1
@@ -203,7 +205,7 @@ def change_logic(lines, character, number):
             if lines[index].strip().startswith(f'if $\\{character.name}\\'):
                 tab_flag = False
                 index += 1
-            out.append(f'if $\\{character.name}\\SkinSwapVar\\SkinSwapVar == {number}\n')
+            out.append(f'if $\\{character.name}\\SkinSwapVar\\SkinSwapVar=={number}\n')
 
         if lines[index] != '\n' and not lines[index].strip().startswith(';'):
             if tab_flag:
@@ -242,10 +244,13 @@ def mod_ini_change():
                     with open(directory / ini_file, 'r', encoding='utf-8') as file:
                         lines = file.readlines()
 
-                    out = change_logic(lines, character_by_name(character_name), number)
-
                     with open(f'{directory / ini_file} {datetime.now().strftime('%d-%m-%Y %H-%M-%S')}_backup', 'w',
                               encoding='utf-8') as file:
+                        file.writelines(lines)
+
+                    out = change_logic(lines, character_by_name(character_name), number)
+
+                    with open(directory / ini_file, 'w', encoding='utf-8') as file:
                         file.writelines(out)
 
 
